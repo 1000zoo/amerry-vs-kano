@@ -1,0 +1,12 @@
+*.png
+*.jpg
+result/
+models/
+figures/
+figure/
+*.JPG
+*.jpeg
+*.JPEG
+__pycache__/
+.DS_Store
+
