@@ -26,8 +26,8 @@ def shuffle_images(path):
 
 
 shuffle_images("/Users/1000zoo/Desktop/ann-project/kano")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/kano-test")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/kano-val")
+shuffle_images("/Users/1000zoo/Desktop/ann-project/kano_test")
+shuffle_images("/Users/1000zoo/Desktop/ann-project/kano_val")
 shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry-test")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry-val")
+shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry_test")
+shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry_val")
