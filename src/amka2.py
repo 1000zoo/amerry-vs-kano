@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 INPUT_SHAPE = (128, 128, 3)
 PATH_FIGURE = ""
 PATH_MODELS = ""
+WINDOW_PATH = ""
 
 
 def data_generator(directory, target_size=(128,128), batch_size=20, class_mode='binary'):
@@ -118,4 +119,14 @@ def save_txt(result = {}, title="amka2_result"):
             string += "\n"
             f.write(string)
 
+def main():
+    train_data = data_generator()
+    val_data = data_generator()
+    test_data = data_generator()
 
+    pre_training(train_data, val_data, test_data)
+    fine_tuning(train_data, val_data, test_data)
+
+
+if __name__ == "__main__":
+    main()
