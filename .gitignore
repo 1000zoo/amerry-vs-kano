@@ -1,12 +1,13 @@
 *.png
 *.jpg
-result/
-models/
-figures/
+result_txt/
+models_h5/
+figures.jpg/
 figure/
 *.JPG
 *.jpeg
 *.JPEG
+*.txt
 __pycache__/
 .DS_Store
 
