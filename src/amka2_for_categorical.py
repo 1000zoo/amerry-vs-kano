@@ -10,11 +10,11 @@ EPOCHS = 2
 PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
 PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
 PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
-MODEL_NAME = "amka2_binary_"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/categorical/"
+MODEL_NAME = "amka2_categorical_"
 
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary'):
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical'):
     datagen = ImageDataGenerator(rescale=1./255)
     return datagen.flow_from_directory(
         directory,
@@ -41,11 +41,11 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(1, activation="sigmoid"))
+    model.add(layers.Dense(1, activation="softmax"))
     
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
 
     pre_history = model.fit(
@@ -70,7 +70,7 @@ def fine_tuning(train_data, val_data, test_data):
             layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
     history = model.fit(
         train_data, epochs = EPOCHS, validation_data = val_data

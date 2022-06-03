@@ -1,7 +1,5 @@
-s = "asdf"
-
-s1 = s.split(".")
+s = ".123"
+ns = ""
+s1 = s.split(".")[:-1]
 
 print(s1)
-print(type(s1))
-print(len(s1))
