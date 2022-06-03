@@ -10,4 +10,5 @@ figure/
 *.txt
 __pycache__/
 .DS_Store
+*.h5
 
