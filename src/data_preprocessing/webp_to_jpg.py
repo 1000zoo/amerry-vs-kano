@@ -9,7 +9,7 @@ def wtoj(img_path):
         if img_name.split(".")[-1] == "webp":
             img_name = convert_extension(img_name)
             new_img_path = NPATH + img_name
-            im = Image.open(img_path).convert("RGB")
+            im = Image.open(img_path).convert("RGBA")
             im.save(new_img_path, "jpeg")
     except IndexError:
         return
