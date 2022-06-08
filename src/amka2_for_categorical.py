@@ -6,11 +6,11 @@ import numpy as np
 
 INPUT_SHAPE = (64, 64, 3)
 TARGET_SIZE = (64, 64)
-EPOCHS = 2
-PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
-PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
-PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/categorical/"
+EPOCHS = 100
+PATH_FIGURE = "figures/"
+PATH_MODELS = "models/"
+PATH_TXT = "txtfiles/"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_vs_other_data/"
 MODEL_NAME = "amka2_categorical_"
 
 
@@ -41,7 +41,7 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(1, activation="softmax"))
+    model.add(layers.Dense(3, activation="softmax"))
     
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
@@ -49,7 +49,7 @@ def pre_training(train_data, val_data, test_data):
     )
 
     pre_history = model.fit(
-        train_data, epochs = EPOCHS//2, validation_data = val_data
+        train_data, epochs = EPOCHS, validation_data = val_data
     )
     plot_history(pre_history, title=MODEL_NAME+"pre_train_loss.jpg", history_type="loss")
     plot_history(pre_history, title=MODEL_NAME+"pre_train_acc.jpg",history_type="accuracy")

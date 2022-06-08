@@ -4,9 +4,9 @@ from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
 
-INPUT_SHAPE = (92, 92, 3)
-TARGET_SIZE = (92, 92)
-EPOCHS = 2
+INPUT_SHAPE = (64, 64, 3)
+TARGET_SIZE = (64, 64)
+EPOCHS = 100
 PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
 PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
 PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
@@ -35,11 +35,13 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.GlobalAveragePooling2D())
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
-    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dense(256, activation="relu"))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(32, activation="relu"))
+    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dropout(0.25))
+    model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(1, activation="softmax"))
     

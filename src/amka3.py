@@ -4,12 +4,12 @@ from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
 
-INPUT_SHAPE = (92, 92, 3)
-TARGET_SIZE = (92, 92)
+INPUT_SHAPE = (64, 64, 3)
+TARGET_SIZE = (64, 64)
 EPOCHS = 100
-PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
-PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
-PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
+PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/src/figures/"
+PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/src/models/"
+PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/src/txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
 MODEL_NAME = "amka3_binary_"
 
@@ -35,11 +35,13 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.GlobalAveragePooling2D())
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
-    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dense(256, activation="relu"))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(32, activation="relu"))
+    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dropout(0.25))
+    model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(1, activation="sigmoid"))
     
@@ -49,7 +51,7 @@ def pre_training(train_data, val_data, test_data):
     )
 
     pre_history = model.fit(
-        train_data, epochs = EPOCHS//2, validation_data = val_data
+        train_data, epochs = EPOCHS, validation_data = val_data
     )
     plot_history(pre_history, title=MODEL_NAME+"pre_train_loss.jpg", history_type="loss")
     plot_history(pre_history, title=MODEL_NAME+"pre_train_acc.jpg",history_type="accuracy")
@@ -66,7 +68,7 @@ def fine_tuning(train_data, val_data, test_data):
     conv_base = model.layers[0]
 
     for layer in conv_base.layers:
-        if layer.name.startswith("block5_conv3"):
+        if layer.name.startswith("block5"):
             layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),

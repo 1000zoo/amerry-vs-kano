@@ -6,10 +6,10 @@ import numpy as np
 
 INPUT_SHAPE = (64, 64, 3)
 TARGET_SIZE = (64, 64)
-EPOCHS = 2
-PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
-PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
-PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
+EPOCHS = 100
+PATH_FIGURE = "figures/"
+PATH_MODELS = "models/"
+PATH_TXT = "txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
 MODEL_NAME = "amka2_binary_"
 
@@ -49,7 +49,7 @@ def pre_training(train_data, val_data, test_data):
     )
 
     pre_history = model.fit(
-        train_data, epochs = EPOCHS//2, validation_data = val_data
+        train_data, epochs = EPOCHS, validation_data = val_data
     )
     plot_history(pre_history, title=MODEL_NAME+"pre_train_loss.jpg", history_type="loss")
     plot_history(pre_history, title=MODEL_NAME+"pre_train_acc.jpg",history_type="accuracy")
