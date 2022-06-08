@@ -11,10 +11,19 @@ PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
 PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
 PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/categorical/"
-MODEL_NAME = "amka2_categorical_"
+MODEL_NAME = "amka4_categorical_"
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical'):
-    datagen = ImageDataGenerator(rescale=1./255)
+
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
+    if augmentation:
+        datagen = ImageDataGenerator(
+            rescale = 1./255,
+            rotation_range=20, shear_range=0.1,
+            width_shift_range=0.1, height_shift_range=0.1,
+            zoom_range=0.1, horizontal_flip=True, fill_mode='nearest'
+        )
+    else:
+        datagen = ImageDataGenerator(rescale=1./255)
     return datagen.flow_from_directory(
         directory,
         target_size=target_size,

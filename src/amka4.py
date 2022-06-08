@@ -6,15 +6,25 @@ import numpy as np
 
 INPUT_SHAPE = (64, 64, 3)
 TARGET_SIZE = (64, 64)
-EPOCHS = 1
+EPOCHS = 2
 PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
 PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
 PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/categorical/"
-MODEL_NAME = "amka2_categorical_"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
+MODEL_NAME = "amka4_binary_"
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical'):
-    datagen = ImageDataGenerator(rescale=1./255)
+
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary', augmentation=False):
+    if augmentation:
+        datagen = ImageDataGenerator(
+            rescale = 1./255,
+            rotation_range=20, shear_range=0.1,
+            width_shift_range=0.1, height_shift_range=0.1,
+            zoom_range=0.1, horizontal_flip=True, fill_mode='nearest'
+        )
+    else:
+        datagen = ImageDataGenerator(rescale=1./255)
+
     return datagen.flow_from_directory(
         directory,
         target_size=target_size,
@@ -40,11 +50,11 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(1, activation="softmax"))
+    model.add(layers.Dense(1, activation="sigmoid"))
     
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
-        loss = "categorical_crossentropy", metrics = ["accuracy"]
+        loss = "binary_crossentropy", metrics = ["accuracy"]
     )
 
     pre_history = model.fit(
@@ -69,7 +79,7 @@ def fine_tuning(train_data, val_data, test_data):
             layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),
-        loss = "categorical_crossentropy", metrics = ["accuracy"]
+        loss = "binary_crossentropy", metrics = ["accuracy"]
     )
     history = model.fit(
         train_data, epochs = EPOCHS, validation_data = val_data
@@ -130,7 +140,7 @@ def save_txt(result = {}, title="result"):
             f.write(string)
 
 def main():
-    train_data = data_generator(WINDOW_PATH + "project_train")
+    train_data = data_generator(WINDOW_PATH + "project_train", augmentation=True)
     val_data = data_generator(WINDOW_PATH + "project_val")
     test_data = data_generator(WINDOW_PATH + "project_test")
 
