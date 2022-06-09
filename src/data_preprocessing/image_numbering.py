@@ -18,16 +18,16 @@ def shuffle_images(path):
         new_name += str(num) + "." + extension
         new_name_list.append(new_name)
     random.shuffle(new_name_list)
-
+    
     for image, new in zip(image_list, new_name_list):
         old_name = os.path.join(path, image)
         new_name = os.path.join(path, new)
         os.rename(old_name, new_name)
 
-shuffle_images("/Users/1000zoo/Desktop/project_train/amerry")
-shuffle_images("/Users/1000zoo/Desktop/project_train/kano")
-shuffle_images("/Users/1000zoo/Desktop/project_test/amerry")
-shuffle_images("/Users/1000zoo/Desktop/project_test/kano")
-shuffle_images("/Users/1000zoo/Desktop/project_val/amerry")
-shuffle_images("/Users/1000zoo/Desktop/project_val/kano")
+shuffle_images("/Users/1000zoo/Desktop/kamerry/project_train/amerry")
+shuffle_images("/Users/1000zoo/Desktop/kamerry/project_train/kano")
+shuffle_images("/Users/1000zoo/Desktop/kamerry/project_test/amerry")
+shuffle_images("/Users/1000zoo/Desktop/kamerry/project_test/kano")
+shuffle_images("/Users/1000zoo/Desktop/kamerry/project_val/amerry")
+shuffle_images("/Users/1000zoo/Desktop/kamerry/project_val/kano")
 
