@@ -6,15 +6,16 @@ def shuffle_images(path):
     dir_name = path.split("/")[-1]
     path += "/"
 
-    image_list_len = len(image_list)
     new_name_list = []
-    for num in range(image_list_len):
+    for num, fname in enumerate(image_list):
         new_name = dir_name
+        extension = fname.split(".")[-1]
+
         if num < 10:
             new_name += "00"
         elif num < 100:
             new_name += "0"
-        new_name += str(num) + ".jpg"
+        new_name += str(num) + "." + extension
         new_name_list.append(new_name)
     random.shuffle(new_name_list)
 
@@ -23,11 +24,10 @@ def shuffle_images(path):
         new_name = os.path.join(path, new)
         os.rename(old_name, new_name)
 
+shuffle_images("/Users/1000zoo/Desktop/project_train/amerry")
+shuffle_images("/Users/1000zoo/Desktop/project_train/kano")
+shuffle_images("/Users/1000zoo/Desktop/project_test/amerry")
+shuffle_images("/Users/1000zoo/Desktop/project_test/kano")
+shuffle_images("/Users/1000zoo/Desktop/project_val/amerry")
+shuffle_images("/Users/1000zoo/Desktop/project_val/kano")
 
-
-shuffle_images("/Users/1000zoo/Desktop/ann-project/kano")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/kano_test")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/kano_val")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry_test")
-shuffle_images("/Users/1000zoo/Desktop/ann-project/amerry_val")

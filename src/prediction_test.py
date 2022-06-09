@@ -29,15 +29,15 @@ model = models.load_model(MODEL_PATH)
 # print(prediction)
 
 image_path = IMG_PATH
-img = image.load_img(image_path, target_size = (64, 64))
+img = image.load_img(image_path, target_size = (128, 128))
 img_tensor = image.img_to_array(img)
 img_tensor = np.expand_dims(img_tensor, axis=0)
 img_tensor = preprocess_input(img_tensor)
 
-prediction = model.predict(img_tensor)
-model.summary()
-category = ["Amerry", "Kano", "Others"]
+# prediction = model.predict(img_tensor)
+# model.summary()
+# category = ["Amerry", "Kano", "Others"]
 plt.imshow(img)
-print(prediction)
-print(category[np.argmax(prediction)])
+# print(prediction)
+# print(category[np.argmax(prediction)])
 plt.show()
