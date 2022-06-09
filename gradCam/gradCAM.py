@@ -1,4 +1,4 @@
-PATH = "/Users/1000zoo/Desktop/realamka/project_test/amerry/amerry789.jpeg"
+PATH = "/Users/1000zoo/Desktop/123/IMG_5781.jpg"
 
 from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 from tensorflow.keras import backend as K
@@ -10,7 +10,7 @@ import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
 
 image_path = PATH
-img = image.load_img(image_path, target_size = (128,128))
+img = image.load_img(image_path, target_size = (128,128,3,3))
 img_tensor = image.img_to_array(img)
 img_tensor = np.expand_dims(img_tensor, axis=0)
 img_tensor = preprocess_input(img_tensor)
