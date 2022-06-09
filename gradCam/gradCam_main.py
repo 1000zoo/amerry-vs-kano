@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 model_builder = keras.applications.xception.Xception
-img_size = (299, 299)
+img_size = (64, 64)
 preprocess_input = keras.applications.xception.preprocess_input
 decode_predictions = keras.applications.xception.decode_predictions
 
-last_conv_layer_name = "block14_sepconv2_act"
+last_conv_layer_name = "block5_conv3"
 
 # The local path to our target image
 img_path = "/Users/1000zoo/Desktop/ann-project/amnewenewnewnew/IMG_5612.jpeg"
@@ -66,55 +66,55 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     return heatmap.numpy()
 
     
-# img_array = preprocess_input(get_img_array(img_path, size=img_size))
+img_array = preprocess_input(get_img_array(img_path, size=img_size))
 
-# # Make model
-# model = model_builder(weights="imagenet")
+# Make model
+model = model_builder(weights="imagenet")
 
-# # Remove last layer's softmax
-# model.layers[-1].activation = None
+# Remove last layer's softmax
+model.layers[-1].activation = None
 
-# # Print what the top predicted class is
-# preds = model.predict(img_array)
-# print("Predicted:", decode_predictions(preds, top=1)[0])
+# Print what the top predicted class is
+preds = model.predict(img_array)
+print("Predicted:", decode_predictions(preds, top=1)[0])
 
-# # Generate class activation heatmap
-# heatmap = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
+# Generate class activation heatmap
+heatmap = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
 
-# # Display heatmap
-# plt.matshow(heatmap)
-# plt.show()
-
-
-# def save_and_display_gradcam(img_path, heatmap, cam_path="cam.jpg", alpha=0.4):
-#     # Load the original image
-#     img = keras.preprocessing.image.load_img(img_path)
-#     img = keras.preprocessing.image.img_to_array(img)
-
-#     # Rescale heatmap to a range 0-255
-#     heatmap = np.uint8(255 * heatmap)
-
-#     # Use jet colormap to colorize heatmap
-#     jet = cm.get_cmap("jet")
-
-#     # Use RGB values of the colormap
-#     jet_colors = jet(np.arange(256))[:, :3]
-#     jet_heatmap = jet_colors[heatmap]
-
-#     # Create an image with RGB colorized heatmap
-#     jet_heatmap = keras.preprocessing.image.array_to_img(jet_heatmap)
-#     jet_heatmap = jet_heatmap.resize((img.shape[1], img.shape[0]))
-#     jet_heatmap = keras.preprocessing.image.img_to_array(jet_heatmap)
-
-#     # Superimpose the heatmap on original image
-#     superimposed_img = jet_heatmap * alpha + img
-#     superimposed_img = keras.preprocessing.image.array_to_img(superimposed_img)
-
-#     # Save the superimposed image
-#     superimposed_img.save(cam_path)
-
-#     # Display Grad CAM
-#     display(Image(cam_path))
+# Display heatmap
+plt.matshow(heatmap)
+plt.show()
 
 
-# save_and_display_gradcam(img_path, heatmap)
+def save_and_display_gradcam(img_path, heatmap, cam_path="cam.jpg", alpha=0.4):
+    # Load the original image
+    img = keras.preprocessing.image.load_img(img_path)
+    img = keras.preprocessing.image.img_to_array(img)
+
+    # Rescale heatmap to a range 0-255
+    heatmap = np.uint8(255 * heatmap)
+
+    # Use jet colormap to colorize heatmap
+    jet = cm.get_cmap("jet")
+
+    # Use RGB values of the colormap
+    jet_colors = jet(np.arange(256))[:, :3]
+    jet_heatmap = jet_colors[heatmap]
+
+    # Create an image with RGB colorized heatmap
+    jet_heatmap = keras.preprocessing.image.array_to_img(jet_heatmap)
+    jet_heatmap = jet_heatmap.resize((img.shape[1], img.shape[0]))
+    jet_heatmap = keras.preprocessing.image.img_to_array(jet_heatmap)
+
+    # Superimpose the heatmap on original image
+    superimposed_img = jet_heatmap * alpha + img
+    superimposed_img = keras.preprocessing.image.array_to_img(superimposed_img)
+
+    # Save the superimposed image
+    superimposed_img.save(cam_path)
+
+    # Display Grad CAM
+    display(Image(cam_path))
+
+
+save_and_display_gradcam(img_path, heatmap)
