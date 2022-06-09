@@ -7,7 +7,7 @@ import numpy as np
 
 MODEL_PATH = "models/amka2_categorical_fine_tuning.h5"
 # IMG_PATH = "/Users/1000zoo/Desktop/ann-project/amnewenewnewnew/IMG_5610.jpeg"
-IMG_PATH = "/Users/1000zoo/Desktop/ann-project/kanewnewnewnew/IMG_5585.jpeg"
+IMG_PATH = "/Users/1000zoo/Desktop/ann-project/amnewenewnewnew/IMG_5612.jpeg"
 # IMG_PATH = "/Users/1000zoo/Documents/prog/data_files/dogs_and_cats/train/dogs/dog.5112.jpg"
 
 # def data_generator(directory, target_size=(64,64), batch_size=20, class_mode='categorical'):

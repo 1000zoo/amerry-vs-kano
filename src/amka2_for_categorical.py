@@ -6,13 +6,20 @@ import numpy as np
 
 INPUT_SHAPE = (64, 64, 3)
 TARGET_SIZE = (64, 64)
+<<<<<<< HEAD
 EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_vs_other_data/"
+=======
+EPOCHS = 1
+PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/figures/"
+PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/models/"
+PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/txtfiles/"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/categorical/"
+>>>>>>> 936ef65fb58c3b9a8042503ac8c3f7fddf1d49a0
 MODEL_NAME = "amka2_categorical_"
-
 
 def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical'):
     datagen = ImageDataGenerator(rescale=1./255)

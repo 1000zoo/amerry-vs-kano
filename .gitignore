@@ -2,7 +2,6 @@
 *.jpg
 result_txt/
 models_h5/
-figures.jpg/
 figures/
 models/
 txtfiles/

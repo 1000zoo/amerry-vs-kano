@@ -7,15 +7,23 @@ import numpy as np
 INPUT_SHAPE = (128, 128, 3)
 TARGET_SIZE = (128, 128)
 EPOCHS = 100
-PATH_FIGURE = "figures/"
-PATH_MODELS = "models/"
-PATH_TXT = "txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/amkaproject/"
-MODEL_NAME = "amka2_binary_"
+PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/src/figures/"
+PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/src/models/"
+PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/src/txtfiles/"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/categorical/"
+MODEL_NAME = "amka4_categorical_"
 
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary'):
-    datagen = ImageDataGenerator(rescale=1./255)
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
+    if augmentation:
+        datagen = ImageDataGenerator(
+            rescale = 1./255,
+            rotation_range=20, shear_range=0.1,
+            width_shift_range=0.1, height_shift_range=0.1,
+            zoom_range=0.1, horizontal_flip=True, fill_mode='nearest'
+        )
+    else:
+        datagen = ImageDataGenerator(rescale=1./255)
     return datagen.flow_from_directory(
         directory,
         target_size=target_size,
@@ -41,11 +49,11 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(1, activation="sigmoid"))
+    model.add(layers.Dense(3, activation="softmax"))
     
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
 
     pre_history = model.fit(
@@ -70,7 +78,7 @@ def fine_tuning(train_data, val_data, test_data):
             layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
     history = model.fit(
         train_data, epochs = EPOCHS, validation_data = val_data

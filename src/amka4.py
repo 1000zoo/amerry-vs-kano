@@ -1,5 +1,6 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import VGG16
+from tensorflow.keras.applications.resnet50 import ResNet50
 from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,15 +8,24 @@ import numpy as np
 INPUT_SHAPE = (128, 128, 3)
 TARGET_SIZE = (128, 128)
 EPOCHS = 100
-PATH_FIGURE = "figures/"
-PATH_MODELS = "models/"
-PATH_TXT = "txtfiles/"
+PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/src/figures/"
+PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/src/models/"
+PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/src/txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amkaproject/"
-MODEL_NAME = "amka2_binary_"
+MODEL_NAME = "amka4_binary_"
 
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary'):
-    datagen = ImageDataGenerator(rescale=1./255)
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary', augmentation=False):
+    if augmentation:
+        datagen = ImageDataGenerator(
+            rescale = 1./255,
+            rotation_range=20, shear_range=0.1,
+            width_shift_range=0.1, height_shift_range=0.1,
+            zoom_range=0.1, horizontal_flip=True, fill_mode='nearest'
+        )
+    else:
+        datagen = ImageDataGenerator(rescale=1./255)
+
     return datagen.flow_from_directory(
         directory,
         target_size=target_size,
@@ -25,19 +35,22 @@ def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode
 
 def pre_training(train_data, val_data, test_data):
     model = models.Sequential()
-    conv_base = VGG16(
+    conv_base = ResNet50(
         weights = 'imagenet',
         include_top = False,
         input_shape = INPUT_SHAPE
     )
     conv_base.trainable = False
+    # model.add(layers.GaussianNoise(0.01))
     model.add(conv_base)
     model.add(layers.GlobalAveragePooling2D())
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
-    model.add(layers.Dense(256, activation="relu"))
+    model.add(layers.Dense(512, activation="relu"))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
+    model.add(layers.Dropout(0.25))
+    model.add(layers.Dense(256, activation="relu"))
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
