@@ -5,22 +5,14 @@ from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
 
-INPUT_SHAPE = (128, 128, 3)
-TARGET_SIZE = (128, 128)
-<<<<<<< HEAD
-EPOCHS = 2
-PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/src/figures/"
-PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/src/models/"
-PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/src/txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
-=======
+INPUT_SHAPE = (256, 256, 3)
+TARGET_SIZE = (256, 256)
 EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/realamka/"
->>>>>>> aa4ec3f35d7704701f3270ae759fde2eb1e74650
-MODEL_NAME = "amka5_binary_"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/kamerry0610/"
+MODEL_NAME = "amka6_binary_"
 
 
 def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary', augmentation=False):
@@ -43,8 +35,7 @@ def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode
 
 def pre_training(train_data, val_data, test_data):
     model = models.Sequential()
-    model.add(layers.GaussianNoise(0.01))
-    conv_base = ResNet50(
+    conv_base = VGG16(
         weights = 'imagenet',
         include_top = False,
         input_shape = INPUT_SHAPE
@@ -52,21 +43,15 @@ def pre_training(train_data, val_data, test_data):
     conv_base.trainable = False
     model.add(conv_base)
     model.add(layers.GlobalAveragePooling2D())
-    model.add(layers.Dropout(0.25))
+    model.add(layers.Dropout(0.1))
     model.add(layers.Flatten())
-<<<<<<< HEAD
-    model.add(layers.Dense(32, activation="relu"))
-    model.add(layers.BatchNormalization())
-    model.add(layers.Activation("relu"))
-    model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(16, activation="relu"))
-=======
     model.add(layers.Dense(512, activation="relu"))
+    model.add(layers.Dropout(0.3))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
+    model.add(layers.Dropout(0.3))
     model.add(layers.Dense(64, activation="relu"))
->>>>>>> aa4ec3f35d7704701f3270ae759fde2eb1e74650
-    model.add(layers.Dropout(0.25))
+    model.add(layers.Dropout(0.3))
     model.add(layers.Dense(1, activation="sigmoid"))
     
     model.compile(
@@ -75,7 +60,7 @@ def pre_training(train_data, val_data, test_data):
     )
 
     pre_history = model.fit(
-        train_data, epochs = EPOCHS//2, validation_data = val_data
+        train_data, epochs = EPOCHS, validation_data = val_data
     )
     plot_history(pre_history, title=MODEL_NAME+"pre_train_loss.jpg", history_type="loss")
     plot_history(pre_history, title=MODEL_NAME+"pre_train_acc.jpg",history_type="accuracy")
