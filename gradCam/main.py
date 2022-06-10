@@ -9,8 +9,8 @@ import cv2
 import os
 tf.compat.v1.disable_eager_execution()
 
-MODEL_PATH = "/Users/1000zoo/Desktop/amka2_/amka2_binary_fine_tuning.h5"
-IMG_PATH = "/Users/1000zoo/Desktop/hm"
+MODEL_PATH = "/Users/1000zoo/Desktop/amka6_binary_fine_tuning.h5"
+IMG_PATH = "/Users/1000zoo/Desktop/test"
 
 def category_preds(preds):
     category = ["Amerry", "Kano", "Others"]
@@ -53,7 +53,7 @@ def main():
     for i, image in enumerate(os.listdir(IMG_PATH)):
         image_path = os.path.join(IMG_PATH, image)
 
-        img = pp.image.load_img(image_path, target_size = (128,128))
+        img = pp.image.load_img(image_path, target_size = (256,256))
         img_tensor = pp.image.img_to_array(img)
         img_tensor = np.expand_dims(img_tensor, axis=0)
         img_tensor = preprocess_input(img_tensor)

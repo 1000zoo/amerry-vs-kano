@@ -7,11 +7,11 @@ import numpy as np
 
 INPUT_SHAPE = (128, 128, 3)
 TARGET_SIZE = (128, 128)
-EPOCHS = 100
-PATH_FIGURE = "figures/"
-PATH_MODELS = "models/"
-PATH_TXT = "txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/amkaproject/"
+EPOCHS = 2
+PATH_FIGURE = "C:/Users/cjswl/python__/amerry_vs_kano/src/figures/"
+PATH_MODELS = "C:/Users/cjswl/python__/amerry_vs_kano/src/models/"
+PATH_TXT = "C:/Users/cjswl/python__/amerry_vs_kano/src/txtfiles/"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
 MODEL_NAME = "amka5_binary_"
 
 
@@ -35,6 +35,7 @@ def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode
 
 def pre_training(train_data, val_data, test_data):
     model = models.Sequential()
+    model.add(layers.GaussianNoise(0.01))
     conv_base = ResNet50(
         weights = 'imagenet',
         include_top = False,
@@ -45,12 +46,11 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.GlobalAveragePooling2D())
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
-    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dense(32, activation="relu"))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
+    model.add(layers.Dropout(0.25))
     model.add(layers.Dense(16, activation="relu"))
-    model.add(layers.BatchNormalization())
-    model.add(layers.Activation("relu"))
     model.add(layers.Dropout(0.25))
     model.add(layers.Dense(1, activation="sigmoid"))
     
@@ -60,7 +60,7 @@ def pre_training(train_data, val_data, test_data):
     )
 
     pre_history = model.fit(
-        train_data, epochs = EPOCHS, validation_data = val_data
+        train_data, epochs = EPOCHS//2, validation_data = val_data
     )
     plot_history(pre_history, title=MODEL_NAME+"pre_train_loss.jpg", history_type="loss")
     plot_history(pre_history, title=MODEL_NAME+"pre_train_acc.jpg",history_type="accuracy")
@@ -142,7 +142,7 @@ def save_txt(result = {}, title="result"):
             f.write(string)
 
 def main():
-    train_data = data_generator(WINDOW_PATH + "project_train")
+    train_data = data_generator(WINDOW_PATH + "project_train", augmentation=True)
     val_data = data_generator(WINDOW_PATH + "project_val")
     test_data = data_generator(WINDOW_PATH + "project_test")
 

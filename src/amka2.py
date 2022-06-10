@@ -11,7 +11,9 @@ PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amkaproject/"
-MODEL_NAME = "amka2_binary_"
+MAC_PATH = "/Users/1000zoo/Desktop/realamka"
+PATH = MAC_PATH
+MODEL_NAME = "amka2_test_"
 
 
 def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary'):
@@ -131,9 +133,9 @@ def save_txt(result = {}, title="result"):
             f.write(string)
 
 def main():
-    train_data = data_generator(WINDOW_PATH + "project_train")
-    val_data = data_generator(WINDOW_PATH + "project_val")
-    test_data = data_generator(WINDOW_PATH + "project_test")
+    train_data = data_generator(PATH + "project_train")
+    val_data = data_generator(PATH + "project_val")
+    test_data = data_generator(PATH + "project_test")
 
     pre_training(train_data, val_data, test_data)
     fine_tuning(train_data, val_data, test_data)
