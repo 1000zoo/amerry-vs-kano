@@ -5,17 +5,17 @@ from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
 
-INPUT_SHAPE = (128, 128, 3)
-TARGET_SIZE = (128, 128)
+INPUT_SHAPE = (256, 256, 3)
+TARGET_SIZE = (256, 256)
 EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/realamka/"
-MODEL_NAME = "amka5_binary_"
+WINDOW_PATH = "C:/Users/cjswl/Desktop/kamerry_other/"
+MODEL_NAME = "amka6_categorical_"
 
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary', augmentation=False):
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
     if augmentation:
         datagen = ImageDataGenerator(
             rescale = 1./255,
@@ -35,7 +35,7 @@ def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode
 
 def pre_training(train_data, val_data, test_data):
     model = models.Sequential()
-    conv_base = ResNet50(
+    conv_base = VGG16(
         weights = 'imagenet',
         include_top = False,
         input_shape = INPUT_SHAPE
@@ -43,18 +43,20 @@ def pre_training(train_data, val_data, test_data):
     conv_base.trainable = False
     model.add(conv_base)
     model.add(layers.GlobalAveragePooling2D())
-    model.add(layers.Dropout(0.25))
+    model.add(layers.Dropout(0.1))
     model.add(layers.Flatten())
     model.add(layers.Dense(512, activation="relu"))
+    model.add(layers.Dropout(0.3))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
+    model.add(layers.Dropout(0.3))
     model.add(layers.Dense(64, activation="relu"))
-    model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(1, activation="sigmoid"))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(3, activation="softmax"))
     
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
 
     pre_history = model.fit(
@@ -79,7 +81,7 @@ def fine_tuning(train_data, val_data, test_data):
             layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
     history = model.fit(
         train_data, epochs = EPOCHS, validation_data = val_data
@@ -140,7 +142,7 @@ def save_txt(result = {}, title="result"):
             f.write(string)
 
 def main():
-    train_data = data_generator(WINDOW_PATH + "project_train")
+    train_data = data_generator(WINDOW_PATH + "project_train", augmentation=True)
     val_data = data_generator(WINDOW_PATH + "project_val")
     test_data = data_generator(WINDOW_PATH + "project_test")
 

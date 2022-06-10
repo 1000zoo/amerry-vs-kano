@@ -12,10 +12,10 @@ PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
 WINDOW_PATH = "C:/Users/cjswl/Desktop/realamka/"
-MODEL_NAME = "amka5_binary_"
+MODEL_NAME = "amka5_categorical_"
 
 
-def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='binary', augmentation=False):
+def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
     if augmentation:
         datagen = ImageDataGenerator(
             rescale = 1./255,
@@ -50,11 +50,13 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.Activation("relu"))
     model.add(layers.Dense(64, activation="relu"))
     model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(1, activation="sigmoid"))
+    model.add(layers.Dense(16, activation="relu"))
+    model.add(layers.Dropout(0.25))
+    model.add(layers.Dense(3, activation="softmax"))
     
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
 
     pre_history = model.fit(
@@ -79,7 +81,7 @@ def fine_tuning(train_data, val_data, test_data):
             layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
     history = model.fit(
         train_data, epochs = EPOCHS, validation_data = val_data
