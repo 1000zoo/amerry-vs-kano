@@ -50,8 +50,6 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
     model.add(layers.Dropout(0.3))
-    model.add(layers.Dense(32, activation="relu"))
-    model.add(layers.Dropout(0.1))
     model.add(layers.Dense(3, activation="softmax"))
     
     model.compile(
