@@ -1,6 +1,10 @@
 import random
 import os
 
+"""
+이미지들을 넘버링하고 섞어주기 위한 코드
+"""
+
 def shuffle_images(path):
     image_list = os.listdir(path=path)
     dir_name = path.split("/")[-1]

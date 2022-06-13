@@ -1,18 +1,10 @@
-# import os
 
-# dirpath = "/Users/1000zoo/Desktop/"
-# path = "/Users/1000zoo/Desktop/kano000jpeg"
+"""
+image_numbering.py 에서
+실수로 확장자 앞에 "." 을 추가하지 못한채로 코드를 실행하여
+이를 되돌리기 위한 코드
+"""
 
-# old_name = path
-# fname = path.split("/")[-1]
-# path = path.split("/")[:-1]
-# print(fname)
-# new_name = dirpath
-
-# fname = fname[:7] + "." + fname[7:]
-# print(fname)
-
-# os.rename(old_name, new_name + fname)
 
 import os
 

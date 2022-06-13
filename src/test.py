@@ -13,10 +13,14 @@
 # shape = str_to_tuple(input(">> ").strip("()"))
 # print(type(shape))
 
-import sys
+# import sys
 
-def a():
-    return 30, sys._getframe().f_code.co_name
+# def a():
+#     return 30, sys._getframe().f_code.co_name
 
-i = a()[0]
-print(i)
+# i = a()[0]
+# print(i)
+
+a = [0]
+
+print(a[0][0])

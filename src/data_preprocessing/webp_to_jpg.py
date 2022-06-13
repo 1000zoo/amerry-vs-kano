@@ -1,6 +1,10 @@
 from PIL import Image
 import os
 
+"""
+webp => jpg 변환 코드
+"""
+
 OPATH = "/Users/1000zoo/Desktop/new__/old-dachshund/old/"
 NPATH = "/Users/1000zoo/Desktop/new__/old-dachshund/new/"
 def wtoj(img_path):
