@@ -1,7 +1,7 @@
 from tensorflow.keras import models, layers, optimizers
 from tensorflow.keras.applications import VGG16
 
-def build_model(model_name="kame1", input_shape=(256,256)):
+def build_model(model_name="kame1", input_shape=(256,256,3)):
     
     if model_name == "kame1":
         return kame1(input_shape)
@@ -22,7 +22,7 @@ def build_model(model_name="kame1", input_shape=(256,256)):
     else:
         print("invalid model.\nMODEL_NAME => kame1 ~ kame8")
 
-def kame1(input_shape=(256,256)):
+def kame1(input_shape=(256,256,3)):
     model = models.Sequential()
     model.add(layers.GaussianNoise(0.2))
     conv_base = VGG16(
@@ -50,7 +50,7 @@ def kame1(input_shape=(256,256)):
     )
     return model
 
-def kame2(input_shape=(128,128)):
+def kame2(input_shape=(128,128,3)):
     model = models.Sequential()
     conv_base = VGG16(
         weights = 'imagenet',
@@ -98,7 +98,7 @@ def kame3(input_shape=(256,256)):
     return model
 
 
-def kame4(input_shape=(256,256)):
+def kame4(input_shape=(256,256,3)):
     model = models.Sequential()
     conv_base = VGG16(
         weights = 'imagenet',
@@ -126,7 +126,7 @@ def kame4(input_shape=(256,256)):
     return model
 
 
-def kame5(input_shape=(256,256)):
+def kame5(input_shape=(256,256,3)):
     model = models.Sequential()
     conv_base = VGG16(
         weights = 'imagenet',
@@ -154,7 +154,7 @@ def kame5(input_shape=(256,256)):
     return model
 
 
-def kame6(input_shape=(256,256)):
+def kame6(input_shape=(256,256,3)):
     model = models.Sequential()
     conv_base = VGG16(
         weights = 'imagenet',
@@ -182,7 +182,7 @@ def kame6(input_shape=(256,256)):
     return model
 
 
-def kame7(input_shape=(224,224)):
+def kame7(input_shape=(224,224,3)):
     model = models.Sequential()
     conv_base = VGG16(
         weights = 'imagenet',
@@ -211,7 +211,7 @@ def kame7(input_shape=(224,224)):
     return model
 
 
-def kame8(input_shape=(256,256)):
+def kame8(input_shape=(256,256,3)):
     model = models.Sequential()
     conv_base = VGG16(
         weights = 'imagenet',

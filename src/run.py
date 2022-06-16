@@ -13,11 +13,12 @@ PATH_TXT = "txtfiles/"
 
 ## Data 경로
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
-MAC_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/kamerry"
+MAC_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/ktest"
 DATA_PATH = MAC_PATH
 
 ## 선택할 모델 이름 (파일들의 이름 저장에 사용됨)
-MODEL_NAME = "kame1"
+MODEL_NAME = "kame8"    # (kame1 ~ kame8)
+EPOCHS = 100
 
 def data_generator(directory, target_size=(), batch_size=20, class_mode='categorical', augmentation=False):
     if augmentation:
@@ -37,15 +38,16 @@ def data_generator(directory, target_size=(), batch_size=20, class_mode='categor
         class_mode=class_mode
     )
 
-def pre_training(train_data, val_data, test_data, epochs=1, base="vgg16"):
+def pre_training(train_data, val_data, test_data, epochs=EPOCHS, base="vgg16"):
     input_shape = return_shape(train_data)
+    input_shape = (input_shape[0], input_shape[1], 3)
     model = amodels.build_model(MODEL_NAME, input_shape)
 
     pre_history = model.fit(
         train_data, epochs = epochs, validation_data = val_data
     )
-    plot_history(pre_history, title=MODEL_NAME+"_pre_train_loss.jpg", history_type="loss")
-    plot_history(pre_history, title=MODEL_NAME+"_pre_train_acc.jpg",history_type="accuracy")
+    plot_history(pre_history, title=MODEL_NAME+"_pre_train_loss.jpg", history_type="loss", path_figure=PATH_FIGURE)
+    plot_history(pre_history, title=MODEL_NAME+"_pre_train_acc.jpg",history_type="accuracy", path_figure=PATH_FIGURE)
     test_loss, test_acc = model.evaluate(test_data)
     results = dict_result(
         pre_history.history["loss"][-1], pre_history.history["accuracy"][-1],
@@ -54,7 +56,7 @@ def pre_training(train_data, val_data, test_data, epochs=1, base="vgg16"):
     save_txt(results, MODEL_NAME+"_pretraining")
     model.save(PATH_MODELS+MODEL_NAME+"_pretraining.h5")
 
-def fine_tuning(train_data, val_data, test_data, epochs=1):
+def fine_tuning(train_data, val_data, test_data, epochs=EPOCHS):
     model = models.load_model(PATH_MODELS+MODEL_NAME+"_pretraining.h5")
     if MODEL_NAME == "kame1" or MODEL_NAME == "kame3":
         conv_base = model.layers[1]
@@ -76,8 +78,8 @@ def fine_tuning(train_data, val_data, test_data, epochs=1):
     history = model.fit(
         train_data, epochs = epochs, validation_data = val_data
     )
-    plot_history(history, title=MODEL_NAME+"_fine_tuning_loss", history_type="loss")
-    plot_history(history, title=MODEL_NAME+"_fine_tuning_acc", history_type="accuracy")
+    plot_history(history, title=MODEL_NAME+"_fine_tuning_loss", history_type="loss", path_figure=PATH_FIGURE)
+    plot_history(history, title=MODEL_NAME+"_fine_tuning_acc", history_type="accuracy", path_figure=PATH_FIGURE)
     test_loss, test_acc = model.evaluate(test_data)
     results = dict_result(
         history.history["loss"][-1], history.history["accuracy"][-1],

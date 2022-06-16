@@ -5,12 +5,14 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 
-TEST_DIR = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/test-for-scikit-learn"
+# 모든 모델이 들어있는 폴더 경로
 MODEL_DIR = "/Users/1000zoo/Desktop/ann-project/result-models/"
+# 테스트할 이미지들이 들어있는 폴더
+TEST_DIR = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/test-for-scikit-learn"
 
+# confusion matrix 이미지를 만드는 함수
+# https://www.delftstack.com/howto/python/plot-confusion-matrix-in-python/
 def plot_matrix(model, model_name):
-
-    ## https://www.delftstack.com/howto/python/plot-confusion-matrix-in-python/
     # creates confusion matrix
     input_shape = input_shape_of(model)
     test_data = test_generator(input_shape)
@@ -21,7 +23,6 @@ def plot_matrix(model, model_name):
     # Setting the attributes
     fig, px = plt.subplots(figsize=(4, 4))
     px.matshow(mat_con, cmap=plt.cm.YlOrRd, alpha=0.5)
-    label_list = ["Amerry", "Kano", "Others"]
     for m in range(mat_con.shape[0]):
         for n in range(mat_con.shape[1]):
             px.text(x=m,y=n,s=mat_con[n, m], va='center', ha='center', size='xx-large')
@@ -32,6 +33,7 @@ def plot_matrix(model, model_name):
     plt.title(model_name.split(".")[0].split("_")[0], fontsize=15)
     plt.savefig(model_name.split(".")[0].split("_")[0]+".jpg")
 
+## 터미널 표시 전용 함수들
 def print_result(model_name, matrix):
     print()
     print("="*30)
@@ -87,7 +89,6 @@ def main():
             continue
         m = load_model(os.path.join(MODEL_DIR+model))
         plot_matrix(m, model)
-
 
 if __name__ == "__main__":
     main()

@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-INPUT_SHAPE = (224, 224, 3)
-TARGET_SIZE = (224, 224)
+INPUT_SHAPE = (256, 256, 3)
+TARGET_SIZE = (256, 256)
 EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
 WINDOW_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/kamerry/"
-MODEL_NAME = "amka7_categorical_"
+MODEL_NAME = "amka5_categorical_"
 
 
 def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
@@ -44,18 +44,17 @@ def pre_training(train_data, val_data, test_data):
     conv_base.trainable = False
     model.add(conv_base)
     model.add(layers.GlobalAveragePooling2D())
-    model.add(layers.Dropout(0.5))
+    model.add(layers.Dropout(0.1))
     model.add(layers.Flatten())
-    model.add(layers.Dense(512, activation="relu"))
-    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(1024, activation="relu"))
+    model.add(layers.Dropout(0.3))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
-    model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(16, activation="relu"))
-    model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(32, activation="relu"))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dropout(0.3))
     model.add(layers.Dense(3, activation="softmax"))
-
+    
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
         loss = "categorical_crossentropy", metrics = ["accuracy"]

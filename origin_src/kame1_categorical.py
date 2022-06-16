@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-INPUT_SHAPE = (224, 224, 3)
-TARGET_SIZE = (224, 224)
+INPUT_SHAPE = (256, 256, 3)
+TARGET_SIZE = (256, 256)
 EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
 WINDOW_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/kamerry/"
-MODEL_NAME = "amka7_categorical_"
+MODEL_NAME = "amka1_categorical_"
 
 
 def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
@@ -36,6 +36,7 @@ def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode
 
 def pre_training(train_data, val_data, test_data):
     model = models.Sequential()
+    model.add(layers.GaussianNoise(0.2))
     conv_base = VGG16(
         weights = 'imagenet',
         include_top = False,
@@ -51,11 +52,10 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.BatchNormalization())
     model.add(layers.Activation("relu"))
     model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(16, activation="relu"))
-    model.add(layers.Dropout(0.25))
-    model.add(layers.Dense(32, activation="relu"))
+    model.add(layers.Dense(64, activation="relu"))
+    model.add(layers.Dropout(0.5))
     model.add(layers.Dense(3, activation="softmax"))
-
+    
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
         loss = "categorical_crossentropy", metrics = ["accuracy"]
@@ -76,7 +76,7 @@ def pre_training(train_data, val_data, test_data):
 
 def fine_tuning(train_data, val_data, test_data):
     model = models.load_model(PATH_MODELS + MODEL_NAME+"pretraining.h5")
-    conv_base = model.layers[0]
+    conv_base = model.layers[1]
 
     for layer in conv_base.layers:
         if layer.name.startswith("block5"):

@@ -4,6 +4,7 @@ from tensorflow.keras.applications.resnet50 import ResNet50
 from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 INPUT_SHAPE = (256, 256, 3)
 TARGET_SIZE = (256, 256)
@@ -11,8 +12,8 @@ EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/kamerry_other/"
-MODEL_NAME = "kame8_categorical_"
+WINDOW_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/kamerry/"
+MODEL_NAME = "amka8_categorical_"
 
 
 def data_generator(directory, target_size=TARGET_SIZE, batch_size=20, class_mode='categorical', augmentation=False):
@@ -51,7 +52,7 @@ def pre_training(train_data, val_data, test_data):
     model.add(layers.Activation("relu"))
     model.add(layers.Dropout(0.3))
     model.add(layers.Dense(3, activation="softmax"))
-    
+
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-4),
         loss = "categorical_crossentropy", metrics = ["accuracy"]
@@ -139,7 +140,18 @@ def save_txt(result = {}, title="result"):
             string += "\n"
             f.write(string)
 
+def mkdir(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        pass
+
 def main():
+    mkdir(PATH_FIGURE)
+    mkdir(PATH_TXT)
+    mkdir(PATH_MODELS)
+
     train_data = data_generator(WINDOW_PATH + "project_train", augmentation=True)
     val_data = data_generator(WINDOW_PATH + "project_val")
     test_data = data_generator(WINDOW_PATH + "project_test")

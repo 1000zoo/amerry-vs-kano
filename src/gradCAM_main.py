@@ -9,7 +9,9 @@ import cv2
 import os
 tf.compat.v1.disable_eager_execution()
 
+# 모델은 하나만
 MODEL_PATH = "/Users/1000zoo/Desktop/ann-project/result-models/kame2_categorical_fine_tuning.h5"
+# 한장의 이미지 경로 혹은 "이미지만 있는" 폴더 경로
 IMG_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/just-test-data/kano/"
 model = load_model(MODEL_PATH)
 

@@ -4,6 +4,7 @@ from tensorflow.keras.applications.resnet50 import ResNet50
 from tensorflow.keras import models, layers, optimizers
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 INPUT_SHAPE = (256, 256, 3)
 TARGET_SIZE = (256, 256)
@@ -11,7 +12,7 @@ EPOCHS = 100
 PATH_FIGURE = "figures/"
 PATH_MODELS = "models/"
 PATH_TXT = "txtfiles/"
-WINDOW_PATH = "C:/Users/cjswl/Desktop/kamerry_other/"
+WINDOW_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/kamerry/"
 MODEL_NAME = "amka6_categorical_"
 
 
@@ -141,7 +142,18 @@ def save_txt(result = {}, title="result"):
             string += "\n"
             f.write(string)
 
+def mkdir(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        pass
+
 def main():
+    mkdir(PATH_FIGURE)
+    mkdir(PATH_TXT)
+    mkdir(PATH_MODELS)
+
     train_data = data_generator(WINDOW_PATH + "project_train", augmentation=True)
     val_data = data_generator(WINDOW_PATH + "project_val")
     test_data = data_generator(WINDOW_PATH + "project_test")
