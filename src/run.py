@@ -1,11 +1,10 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import VGG16
-from tensorflow.keras.applications.resnet50 import ResNet50
-from tensorflow.keras import models, layers, optimizers
+from tensorflow.keras import models, optimizers
 import matplotlib.pyplot as plt
-from mutil import dict_result, get_input_shape, highlight_string, plot_history, return_shape, save_txt
+from mutil import dict_result, get_target_size, plot_history, return_shape, save_txt
 import amodels
 import numpy as np
+import os
 
 ## 그래프, 모델, loss & acc 텍스트 파일 저장 경로
 PATH_FIGURE = "figures/"
@@ -14,13 +13,13 @@ PATH_TXT = "txtfiles/"
 
 ## Data 경로
 WINDOW_PATH = "C:/Users/cjswl/Desktop/amerry_vs_kano_data/"
-MAC_PATH = "/Users/1000zoo/Desktop/amerry_kano_1/"
+MAC_PATH = "/Users/1000zoo/Desktop/ann-project/kamerry-data-set/kamerry"
 DATA_PATH = MAC_PATH
 
 ## 선택할 모델 이름 (파일들의 이름 저장에 사용됨)
 MODEL_NAME = "kame1"
 
-def data_generator(directory, target_size=(), batch_size=20, class_mode='binary', augmentation=False):
+def data_generator(directory, target_size=(), batch_size=20, class_mode='categorical', augmentation=False):
     if augmentation:
         datagen = ImageDataGenerator(
             rescale = 1./255,
@@ -38,7 +37,7 @@ def data_generator(directory, target_size=(), batch_size=20, class_mode='binary'
         class_mode=class_mode
     )
 
-def pre_training(train_data, val_data, test_data, epochs=100, base="vgg16"):
+def pre_training(train_data, val_data, test_data, epochs=1, base="vgg16"):
     input_shape = return_shape(train_data)
     model = amodels.build_model(MODEL_NAME, input_shape)
 
@@ -55,16 +54,24 @@ def pre_training(train_data, val_data, test_data, epochs=100, base="vgg16"):
     save_txt(results, MODEL_NAME+"_pretraining")
     model.save(PATH_MODELS+MODEL_NAME+"_pretraining.h5")
 
-def fine_tuning(train_data, val_data, test_data, epochs=100):
+def fine_tuning(train_data, val_data, test_data, epochs=1):
     model = models.load_model(PATH_MODELS+MODEL_NAME+"_pretraining.h5")
-    conv_base = model.layers[0]
+    if MODEL_NAME == "kame1" or MODEL_NAME == "kame3":
+        conv_base = model.layers[1]
+    else:
+        conv_base = model.layers[0]
+    if MODEL_NAME == "kame8":
+        for layer in conv_base.layers:
+            if layer.name.startswith("block5") or layer.name.startswith("block4"):
+                layer.trainable = True
+    else:
+        for layer in conv_base.layers:
+            if layer.name.startswith("block5"):
+                layer.trainable = True
 
-    for layer in conv_base.layers:
-        if layer.name.startswith("block5"):
-            layer.trainable = True
     model.compile(
         optimizer = optimizers.RMSprop(learning_rate=1e-5),
-        loss = "binary_crossentropy", metrics = ["accuracy"]
+        loss = "categorical_crossentropy", metrics = ["accuracy"]
     )
     history = model.fit(
         train_data, epochs = epochs, validation_data = val_data
@@ -79,12 +86,24 @@ def fine_tuning(train_data, val_data, test_data, epochs=100):
     save_txt(results, MODEL_NAME+"fine_tuning")
     model.save(PATH_MODELS+MODEL_NAME+"_fine_tuning.h5")
 
+def mkdir(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        pass
 
-def main(epochs=100, target_size=(128,128), batch_size=20):
 
-    train_data = data_generator(DATA_PATH + "project_train", target_size=target_size, augmentation=True)
-    val_data = data_generator(DATA_PATH + "project_val", target_size=target_size)
-    test_data = data_generator(DATA_PATH + "project_test", target_size=target_size)
+def main():
+    target_size = get_target_size(MODEL_NAME)
+
+    mkdir(PATH_FIGURE)
+    mkdir(PATH_TXT)
+    mkdir(PATH_MODELS)
+
+    train_data = data_generator(os.path.join(DATA_PATH, "project_train"), target_size=target_size, augmentation=True)
+    val_data = data_generator(os.path.join(DATA_PATH, "project_val"), target_size=target_size)
+    test_data = data_generator(os.path.join(DATA_PATH, "project_test"), target_size=target_size)
 
     pre_training(train_data, val_data, test_data)
     fine_tuning(train_data, val_data, test_data)

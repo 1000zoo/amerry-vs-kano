@@ -4,6 +4,26 @@ import matplotlib.pyplot as plt
 def return_shape(data):
     return data[0][0].shape[1:]
 
+def get_target_size(model_name):
+    if model_name == "kame1":
+        return (256, 256)
+    elif model_name == "kame2":
+        return (128, 128)
+    elif model_name == "kame3":
+        return (256, 256)
+    elif model_name == "kame4":
+        return (256, 256)
+    elif model_name == "kame5":
+        return (256, 256)
+    elif model_name == "kame6":
+        return (256, 256)
+    elif model_name == "kame7":
+        return (224, 224)
+    elif model_name == "kame8":
+        return (256, 256)
+    else:
+        print("invalid model.\nMODEL_NAME => kame1 ~ kame8")
+
 def dict_result(train_loss, train_acc, test_loss, test_acc):
     results = {
         "train_loss" : train_loss,
